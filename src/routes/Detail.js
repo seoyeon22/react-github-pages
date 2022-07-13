@@ -1,6 +1,7 @@
 
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import styles from "./Detail.module.css";
 function Detail(){
     const [loading, setLoading] = useState(true);
     const [movie, setMovie] = useState([]);
@@ -20,13 +21,8 @@ function Detail(){
     }, []);
     const getRating = () => {
         let rating = movie.rating;
-        for(let i = 0; i < 10; i++){
-            if(i < rating){
-                stars.push("⭐");
-            }
-            else{
-                stars.push(" ");
-            }
+        for(let i = 0; i < rating; i++){
+            stars.push("⭐");
         }
         return stars;
     };
@@ -34,20 +30,28 @@ function Detail(){
         <div>
             {loading ? 
             (
-                <h1>Loading...</h1>
+                <div className={styles.loader}>
+                    <span>Loading...</span>
+                </div>
             ) : (
-                <div>
-                    <h1>{movie.title_long}</h1>
-                    <img src={movie.medium_cover_image} />
-                    <h5>
-                        {getRating()} | {movie.runtime}min | {movie.language}
-                    </h5>
-                    <h5>
-                        {movie.genres.map(g => (
-                            <span key={g}>#{g}&ensp;</span>
-                        ))}
-                    </h5>
-                    {movie.description_full}
+                <div className={styles.movie}>
+                    <div className={styles.movie__info}>
+                        <h1 className={styles.movie__title}>{movie.title_long}</h1>
+                        <img src={movie.medium_cover_image} className={styles.movie__img}/>
+                        <ul className={styles.movie__detail}>
+                            <li>{movie.runtime}min</li>
+                            <li>❤️{movie.like_count}</li>
+                            <li>{getRating()}</li>
+                        </ul>
+                        <ul className={styles.movie__genres}>
+                            {movie.genres.map(g => (
+                                <li key={g}>#{g}</li>
+                            ))}
+                        </ul>
+                    </div>
+                    <div className={styles.movie__description}>
+                        {movie.description_full}
+                    </div>
                 </div>
             )}
         </div>
